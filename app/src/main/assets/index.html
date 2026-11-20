@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Insta Recovery Assistant</title>
+
+<style>
+body {
+  background: #100b20;
+  color: white;
+  font-family: Arial;
+  padding: 18px;
+}
+h1 { color: #bd8aff; text-align: center; }
+.card {
+  background: #25183b;
+  padding: 18px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 0;
+}
+button {
+  background: linear-gradient(90deg,#9147ff,#ed55a5);
+  color: white;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  width: 100%;
+  margin-top: 12px;
+  font-weight: bold;
+}
+textarea { height: 170px; }
+a { color: #d5aaff; }
+</style>
+</head>
+
+<body>
+
+<h1>📩 Insta Recovery Assistant</h1>
+<p style="text-align:center">Instagram Account Recovery Helper</p>
+
+<div class="card">
+<h3>Account Information</h3>
+
+<input id="username" placeholder="Instagram Username">
+
+<input id="email" placeholder="Registered Email">
+
+<select id="problem">
+<option>Account Suspended</option>
+<option>Account Disabled</option>
+<option>Account Hacked</option>
+<option>Login Problem</option>
+<option>Wrong Suspension</option>
+</select>
+
+<textarea id="details"
+placeholder="Explain your account problem"></textarea>
+
+<button onclick="generate()">Generate Recovery Email</button>
+</div>
+
+<div class="card">
+<h3>Your Appeal Email</h3>
+<textarea id="result" placeholder="Your email will appear here"></textarea>
+
+<button onclick="copyText()">Copy Email</button>
+<button onclick="sendEmail()">Open Gmail / Email App</button>
+</div>
+
+<div class="card">
+<h3>Official Instagram Support</h3>
+<p><a href="https://help.instagram.com/">Instagram Help Center</a></p>
+<p><a href="https://www.instagram.com/hacked/">Hacked Account Help</a></p>
+</div>
+
+<script>
+function generate() {
+let u = document.getElementById("username").value;
+let e = document.getElementById("email").value;
+let p = document.getElementById("problem").value;
+let d = document.getElementById("details").value;
+
+let msg = `Subject: Request for Instagram Account Review
+
+Hello Instagram Support,
+
+My Instagram account ${u} is facing this issue: ${p}.
+
+Registered email: ${e}
+
+Details:
+${d}
+
+I kindly request you to review my account and guide me through the official recovery process.
+
+Thank you.
+
+Regards,
+${u}`;
+
+document.getElementById("result").value = msg;
+}
+
+function copyText() {
+let t = document.getElementById("result");
+if (!t.value) { alert("Generate email first"); return; }
+t.select();
+document.execCommand("copy");
+alert("Email copied!");
+}
+
+function sendEmail() {
+let t = document.getElementById("result").value;
+if (!t) { alert("Generate email first"); return; }
+location.href = "mailto:?subject=Instagram Account Review&body=" + encodeURIComponent(t);
+}
+</script>
+
+</body>
+</html>
