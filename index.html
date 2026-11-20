@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100b20"><title>Insta Recovery Assistant</title>
+<style>
+:root{--bg:#100b20;--card:#1c1530;--purple:#9b6cff;--pink:#ff5da2;--text:#f8f4ff;--muted:#c2b8d5}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#100b20,#24113b);color:var(--text);font:16px system-ui,sans-serif}
+header{padding:28px 20px 20px;text-align:center;background:radial-gradient(circle at top,#59318b,#100b20 70%)}
+.logo{font-size:38px}h1{font-size:25px;margin:8px 0}header p{color:var(--muted);margin:0}
+main{max-width:720px;margin:auto;padding:16px}.card{background:var(--card);border:1px solid #3b2c56;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 8px 28px #0003}
+h2{font-size:19px;margin:0 0 12px}.hint{color:var(--muted);font-size:13px}
+label{display:block;margin:12px 0 5px;color:#e7def5;font-size:14px}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #51416b;background:#120d20;color:white;font:inherit}
+textarea{min-height:150px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button,.btn{display:inline-block;border:0;border-radius:11px;padding:12px 16px;background:linear-gradient(100deg,var(--purple),var(--pink));color:white;font-weight:700;text-decoration:none;cursor:pointer;margin-top:12px}
+.secondary{background:#34264b}.links a{display:block;color:#d6bfff;padding:8px 0;overflow-wrap:anywhere}
+.notice{border-left:3px solid #ffbf69;padding:10px 12px;background:#30233a;border-radius:8px;color:#ffe5bd;font-size:13px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div class="logo">📩</div><h1>Insta Recovery Assistant</h1><p>Guides and appeal drafts for Instagram account issues</p></header>
+<main>
+<section class="card"><h2>🧭 Choose your issue</h2>
+<label>What happened to your account?</label>
+<select id="issue"><option value="suspended">My account was suspended/disabled</option><option value="hacked">My account was hacked</option><option value="mistake">I think this was a mistake</option><option value="login">I can't log in</option></select>
+<label>Instagram username</label><input id="username" placeholder="@yourusername">
+<div class="row"><div><label>Account email (optional)</label><input id="email" type="email" placeholder="you@example.com"></div><div><label>Date of issue (optional)</label><input id="date" type="date"></div></div>
+<label>What happened? (brief details)</label><textarea id="details" placeholder="Explain what you saw when you tried to log in. Do not include your password or OTP."></textarea>
+<button onclick="generate()">Generate appeal draft</button>
+<p class="hint">Your details are used only to create the draft on this device. Nothing is uploaded by this app.</p></section>
+<section class="card"><h2>✍️ Your appeal draft</h2><textarea id="draft" placeholder="Your generated email will appear here..." readonly></textarea>
+<button onclick="copyDraft()">Copy text</button> <a class="btn secondary" id="emailBtn" href="#" onclick="emailDraft(event)">Open email app</a>
+<p class="hint">The email app opens with your draft. Check the recipient and details before sending. Instagram does not provide a guaranteed general appeal email address.</p></section>
+<section class="card"><h2>🔗 Official Instagram help</h2><div class="links">
+<a href="https://help.instagram.com/" target="_blank">Instagram Help Center ↗</a>
+<a href="https://www.instagram.com/hacked/" target="_blank">Hacked account help ↗</a>
+<a href="https://www.instagram.com/accounts/login/" target="_blank">Instagram login ↗</a>
+</div><p class="hint">Use the in-app review/appeal option shown in your Instagram login screen when available.</p></section>
+<section class="card"><h2>⚠️ Safety first</h2><div class="notice">Never share your Instagram password, login code, OTP, backup codes, or payment with anyone claiming they can recover your account. This app is independent and is not affiliated with or endorsed by Instagram/Meta. Recovery is not guaranteed.</div></section>
+</main><footer>Insta Recovery Assistant · Independent help tool · Version 1.0</footer>
+<script>
+function generate(){
+ const issue=document.getElementById('issue').value, u=document.getElementById('username').value.trim()||'[your username]', e=document.getElementById('email').value.trim()||'[your email]', d=document.getElementById('date').value||'[date]', details=document.getElementById('details').value.trim()||'[briefly describe what happened]';
+ const labels={suspended:'suspended or disabled',hacked:'hacked or accessed without my permission',mistake:'restricted in error',login:'unable to access'};
+ const subject='Request for review of Instagram account – '+u;
+ const body=`Hello Instagram Support,\n\nI am requesting help with my Instagram account, ${u}, which appears to be ${labels[issue]}.\n\nAccount email: ${e}\nDate noticed: ${d}\n\nDetails: ${details}\n\nPlease review my account and let me know if any further information or verification is required. I am willing to follow Instagram's official verification process.\n\nThank you for your time.\nRegards,\n${u}`;
+ document.getElementById('draft').value='Subject: '+subject+'\n\n'+body;
+}
+async function copyDraft(){const t=document.getElementById('draft').value;if(!t){alert('Generate a draft first.');return}try{await navigator.clipboard.writeText(t);alert('Draft copied.')}catch(e){document.getElementById('draft').select();document.execCommand('copy');alert('Draft copied.');}}
+function emailDraft(ev){ev.preventDefault();const t=document.getElementById('draft').value;if(!t){alert('Generate a draft first.');return}const parts=t.split('\n\n');const subject=encodeURIComponent(parts[0].replace('Subject: ',''));const body=encodeURIComponent(parts.slice(1).join('\n\n'));location.href='mailto:?subject='+subject+'&body='+body;}
+</script></body></html>
